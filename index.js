@@ -27,12 +27,15 @@ function loadJson() {
         });
 }
 
-function cleanData(data) {
-    data.forEach(object => {
-        jsonObject.fullname.
+function cleanData(jsonData) {
+    jsonData.forEach(object => {
+        const trimmedName = object.fullname.trim("");
+        console.log(trimmedName);
     })
+    
 }
-
+// const splitName = trimmedName.split(" ");
+//         console.log(splitName);
 function prepareObjects(data) {
     data.forEach(object => {
 
