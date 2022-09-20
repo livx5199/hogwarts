@@ -6,4 +6,10 @@ Cleaning Hogwarts Data
 4. //Capitalize first letter after hyphen
 5. //No spaces around names
 6. Remove quotation marks from nick name
-7. Upload pictures
+7. //Upload pictures
+
+Filtering
+
+1. Filter students based on house
+2. Filter expelled students
+3. Filter based of responsibilities (optional)

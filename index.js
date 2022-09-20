@@ -13,8 +13,67 @@ const Student = {
     gender: ""
 }
 
+const settings = {
+    filterBy: "all"
+}
+
 function init() {
     loadJson();
+    registerDropdown();
+}
+
+//Adds eventlistener to dropdown-menu(filtering)
+function registerDropdown() {
+    document.querySelectorAll("[data-action='filter']")
+        .forEach(button => button.addEventListener("click", selectFilter));
+}
+
+//Registers what has been chosen in dropdown
+function selectFilter(event) {
+    const filter = event.target.dataset.filter;
+    console.log("user selected", filter);
+    
+    setFilter(filter);
+}
+
+//Assigns value of filter to the "filterBy" property
+function setFilter(filter) {
+    settings.filterBy = filter;
+    
+    buildList();
+}
+
+//Recieves what house the filter is, and defines the filteredList variable. Returns it to buildList()
+function filtering(filteredList) {
+    if (settings.filterBy === "gryffindor") {
+        filteredList = allStudents.filter(isGryffindor);
+    } else if (settings.filterBy === "hufflepuff") {
+        filteredList = allStudents.filter(isHufflepuff);
+    } else if (settings.filterBy === "slytherin") {
+        filteredList = allStudents.filter(isSlytherin);
+    }else if (settings.filterBy === "ravenclaw") {
+        filteredList = allStudents.filter(isRavenclaw);
+    } else {
+        filteredList = allStudents;
+}
+    return filteredList;
+}
+
+
+function isGryffindor(student) {
+    return student.house === "Gryffindor";
+}
+
+function isHufflepuff(student) {
+    return student.house === "Hufflepuff";
+}
+
+function isSlytherin(student) {
+    return student.house === "Slytherin";
+}
+
+function isRavenclaw(student) {
+    return student.house === "Ravenclaw";
 }
 
 function loadJson() {
@@ -145,9 +204,13 @@ function cleanData(data) {
 }
 
 
-// const splitName = trimmedName.split(" ");
-//         console.log(splitName);
+function buildList() {
+    //Makes a variable out of the filtered students and sends it to displayList()
+    const currentList = filtering(allStudents);
 
+    displayList(currentList);
+    console.log(currentList);
+}
 
 function displayList(allStudents) {
     //clears the list

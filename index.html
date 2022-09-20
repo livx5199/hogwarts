@@ -16,23 +16,20 @@
     <h1>HOGWARTS</h1>
     <h3>School of witchcraft & wizardry</h3>
   </section>
-    
-    <table id="list">
-      <thead>
-        <tr>
-          <th>First name</th>
-          <th>Middle name</th>
-          <th>Last name</th>
-          <th>Nick name</th>
-          <th>Gender</th>
-          <th>House</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- student template will be copied and inserted here -->
-        
-      </tbody>
-    </table>
+
+  <section id="admin-section"> 
+    <article id="list">
+      <label for="filter-house">Filter students by house</label>
+
+      <select name="filter-house" id="dropdown">
+        <option class="filter" data-action="filter" data-filter="*">All students</option>
+        <option class="filter" data-action="filter" data-filter="gryffindor">Gryffindor</option>
+        <option class="filter" data-action="filter" data-filter="hufflepuff">Hufflepuff</option>
+        <option class="filter" data-action="filter" data-filter="slytherin">Slytherin</option>
+        <option class="filter" data-action="filter" data-filter="ravenclaw">Ravenclaw</option>
+      </select> 
+    </article>
+   
 
     <main></main>
     <template id="animal">
@@ -48,7 +45,7 @@
         </div>
       </article>
     </template>
-    
+  </section>  
     <script src="index.js"></script>
     
 </body>
