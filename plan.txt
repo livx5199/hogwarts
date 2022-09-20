@@ -1,0 +1,9 @@
+Cleaning Hogwarts Data
+
+1. //Make student object
+2. //Split JSON data into parts
+3. //Capitalize first letter of names
+4. //Capitalize first letter after hyphen
+5. //No spaces around names
+6. Remove quotation marks from nick name
+7. Upload pictures

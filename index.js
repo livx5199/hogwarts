@@ -7,9 +7,10 @@ const Student = {
     firstname: "",
     middlename: "",
     lastname: "",
-    nickname: "",
+    nickname: undefined,
     house: "",
     photo: "",
+    gender: ""
 }
 
 function init() {
@@ -23,35 +24,163 @@ function loadJson() {
         .then(response => response.json())
         //taking the rendered json data and sending it to prepareObjects-function
         .then(jsonData => {
-            cleanData(jsonData);
+            prepareObjects(jsonData);
         });
 }
 
-function cleanData(jsonData) {
+function prepareObjects(jsonData) {
     jsonData.forEach(object => {
-        const trimmedName = object.fullname.trim("");
-        console.log(trimmedName);
+
+        //Trim and split json.fullname into array
+        const trimmedArray = object.fullname.trim();
+        const splitArray = trimmedArray.split(" ");
+
+        const student = Object.create(Student);
+
+        const firstName = prepareFirstName();
+        const middleName = prepareMiddleName();
+        const lastName = prepareLastName();
+        const nickName = prepareNickName();
+        const house = prepareHouse();
+        const gender = prepareGender();
+
+        
+        //First name
+        function prepareFirstName() {
+            const FirstName = splitArray[0];
+            const cleanedFirstName = cleanData(FirstName);
+            // console.log(cleanedFirstName);
+            return cleanedFirstName;
+            // console.table(allStudents);
+        }
+        
+        //Middle name
+        function prepareMiddleName() {
+            if (splitArray.length > 2) {
+                const middlename = splitArray.length - 2;
+                const middleNameToString = splitArray[middlename];
+                const cleanedMiddleName = cleanData(middleNameToString);
+                return cleanedMiddleName;
+                
+            } else {
+                student.middlename = undefined;
+            }
+        }
+
+        //Nick name
+        function prepareNickName() {
+            // console.log(splitArray.indexOf(' " '));
+            // if (middleName.contains("\"")) {
+            //     const nickname = splitArray.length - 2;
+            //     const nickNameToString = splitArray[nickname];
+            //     const cleanedNickName = cleanData(nickNameToString);
+            //     return cleanedNickName;
+            // }
+        }
+
+        //Last name
+        function prepareLastName() {
+            const lastname = splitArray.length - 1;
+            const lastNameToString = splitArray[lastname];
+            const casedData = cleanData(lastNameToString);
+            return casedData;
+        }
+
+        //House
+        function prepareHouse() {
+            const houseToString = object.house;
+            const cleanedHouse = cleanData(houseToString);
+            return cleanedHouse;
+        }
+
+        //Gender
+        function prepareGender() {
+            const genderToString = object.gender;
+            const cleanedGender = cleanData(genderToString);
+            return cleanedGender;
+        }
+
+        //Apply cleaned data variables to object
+        student.firstname = firstName;
+        student.middlename = middleName;
+        student.lastname = lastName;
+        student.nickname = nickName;
+        student.house = house;
+        student.gender = gender;
+        // console.log(student.middlename);
+            
+        //Push objects to allStudents
+        allStudents.push(student);
+        // console.log(allStudents);
+        displayList(allStudents);
     })
     
 }
-// const splitName = trimmedName.split(" ");
-//         console.log(splitName);
-function prepareObjects(data) {
-    data.forEach(object => {
+console.log(allStudents);
 
-    })
-    console.log(data);
-    displayList();
+function cleanData(data) {
+    const dataToClean = data;
+    const trimmedData = trimData();
+    const trimmedAndCasedData = caseData(trimmedData);
+    // console.log(trimmedAndCasedData);
+
+    function trimData() {
+        const trimmedData = data.trim();
+        return trimmedData;
+    }
+
+    function caseData(data) {
+        if (data.indexOf("-") === -1) {
+            const casedData = data.substring(0, 1).toUpperCase() + data.substring(1).toLowerCase();
+            return casedData;
+        } else {
+            const firstCasedName = data.substring(0, 1).toUpperCase() + data.substring(1, data.indexOf("-") + 1).toLowerCase();
+            const secondCasedName = data.substring(data.indexOf("-") + 1, data.indexOf("-") + 2).toUpperCase() + data.substring(data.indexOf("-") + 2).toLowerCase();
+            const casedData = firstCasedName + secondCasedName;
+            return casedData;
+        }
+    }
+    
+    return trimmedAndCasedData;
 }
 
-function displayList() {
+
+// const splitName = trimmedName.split(" ");
+//         console.log(splitName);
+
+
+function displayList(allStudents) {
     //clears the list
-    document.querySelector("#list tbody").innerHTML = "";
+    document.querySelector("main").innerHTML = "";
 
     //builds a new list
     allStudents.forEach(displayStudent);
 }
 
 function displayStudent(student) {
+    const clone = document.querySelector("template#animal").content.cloneNode(true);
 
+    // set clone data
+    if (student.middlename === undefined) {
+        clone.querySelector("[data-field=firstname]").textContent = `Name: ${student.firstname} ${student.lastname}`
+    } else {
+        clone.querySelector("[data-field=firstname]").textContent = `Name: ${student.firstname} ${student.middlename} ${student.lastname}`
+    }
+    clone.querySelector("[data-field=photo]").src = "images/" + student.lastname + "_" + student.firstname.substring(0,1) + ".png";
+    clone.querySelector("[data-field=gender]").textContent = `Gender: ${student.gender}`;
+    clone.querySelector("[data-field=house]").textContent = `House: ${student.house}`;
+
+    if (student.house === "Hufflepuff") {
+            clone.querySelector(".grid").style.background = "#b2a713";
+        } else if (student.house === "Slytherin") {
+            clone.querySelector(".grid").style.background = "#60a963";
+        } else if (student.house === "Gryffindor") {
+            clone.querySelector(".grid").style.background = "#a9272b";
+        } else if (student.house === "Ravenclaw") {
+        clone.querySelector(".grid").style.background = "#383c96";
+        }
+    document.querySelector("main").appendChild(clone);
+    
+    
+    
 }
