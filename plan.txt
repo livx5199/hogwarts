@@ -10,6 +10,13 @@ Cleaning Hogwarts Data
 
 Filtering
 
-1. Filter students based on house
+1. //Filter students based on house
 2. Filter expelled students
 3. Filter based of responsibilities (optional)
+
+Sorting
+
+1. Sort based on first names
+2. Sort based on last names
+3. Sort on house
+4. Sort on prefects

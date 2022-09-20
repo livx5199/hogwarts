@@ -47,3 +47,15 @@ h1 {
   font-family: "Libre Baskerville", serif;
   font-size: 2.2rem;
 }
+
+#sorting th.sortby {
+  text-decoration: underline;
+}
+
+#sorting th.sortby[data-sort-direction="asc"]::after {
+  content: " ▲";
+}
+
+#sorting th.sortby[data-sort-direction="desc"]::after {
+  content: " ▼";
+}

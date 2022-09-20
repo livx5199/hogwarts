@@ -18,7 +18,7 @@
   </section>
 
   <section id="admin-section"> 
-    <article id="list">
+    <section id="leftsection">
       <label for="filter-house">Filter students by house</label>
 
       <select name="filter-house" id="dropdown">
@@ -28,24 +28,37 @@
         <option class="filter" data-action="filter" data-filter="slytherin">Slytherin</option>
         <option class="filter" data-action="filter" data-filter="ravenclaw">Ravenclaw</option>
       </select> 
-    </article>
-   
-
-    <main></main>
-    <template id="animal">
-      
-      <article class="grid">
-        <div class="image">
-          <img data-field="photo" src=""/></img>
-        </div>
-        <div class="text">
-          <h3 data-field="firstname">NAME</td>
-          <h3 data-field="gender">GENDER</td>
-          <h3 data-field="house">HOUSE</td>
-        </div>
-      </article>
-    </template>
-  </section>  
+    </section>
+ 
+    <section id="rightsection">
+      <table>
+      <label for="sorting">Sort by:</label> 
+      <thead>  
+        
+      <tr name="sorting" id="sorting">
+        <th data-action="sort" data-sort-direction="asc" data-sort="firstname">First name</th>
+        <th data-action="sort" data-sort-direction="asc" data-sort="lastname">Last name</th>
+        <th data-action="sort" data-sort-direction="asc" data-sort="house">House</th>
+        <th data-action="sort" data-sort-direction="asc" data-sort="prefects">Prefects</th>
+      </tr>
+    </thead> 
+  </table>
+      <main></main>
+      <template id="animal">
+          
+        <article class="grid">
+          <div class="image">
+            <img data-field="photo" src=""/></img>
+          </div>
+          <div class="text">
+            <h3 data-field="firstname">NAME</td>
+            <h3 data-field="gender">GENDER</td>
+            <h3 data-field="house">HOUSE</td>
+          </div>
+        </article>
+      </template>
+      </section>
+    </section>  
     <script src="index.js"></script>
     
 </body>

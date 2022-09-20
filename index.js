@@ -14,7 +14,9 @@ const Student = {
 }
 
 const settings = {
-    filterBy: "all"
+    filterBy: "all",
+    sortBy: "firstname",
+    sortDir: "asc"
 }
 
 function init() {
@@ -22,10 +24,13 @@ function init() {
     registerDropdown();
 }
 
-//Adds eventlistener to dropdown-menu(filtering)
+//Adds eventlistener to dropdown-menu(filtering) and table(sorting)
 function registerDropdown() {
     document.querySelectorAll("[data-action='filter']")
         .forEach(button => button.addEventListener("click", selectFilter));
+    
+        document.querySelectorAll("[data-action='sort']")
+        .forEach(button => button.addEventListener("click", selectSort));
 }
 
 //Registers what has been chosen in dropdown
@@ -74,6 +79,55 @@ function isSlytherin(student) {
 
 function isRavenclaw(student) {
     return student.house === "Ravenclaw";
+}
+
+function selectSort(event) {
+
+    //Applies target data to sortBy and sortDir properties
+    const sortBy = event.target.dataset.sort;
+    const sortDir = event.target.dataset.sortDirection;
+
+    //Finds old sortBy element
+    const oldElement = document.querySelector(`[data-sort='${settings.sortBy}']`);
+    oldElement.classList.remove("sortby");
+
+    //Indicates active sort
+    event.target.classList.add("sortby");
+
+    //Toggles direction
+    if (sortDir === "asc") {
+        event.target.dataset.sortDirection = "desc";
+    } else {
+        event.target.dataset.sortDirection = "asc";
+    }
+
+    setSort(sortBy, sortDir);
+}
+
+function setSort(sortBy, sortDir) {
+    settings.sortBy = sortBy;
+    settings.sortDir = sortDir;
+    buildList();
+}
+
+
+function sortList(sortedList) { 
+    let direction = 1;
+    if (settings.sortDir === "desc") {
+        direction = -1;
+    } else {
+        settings.direction = 1;
+    }
+    sortedList = sortedList.sort(sortByProperty);
+
+    function sortByProperty(studentA, studentB) {
+        if (studentA[settings.sortBy] < studentB[settings.sortBy]) {
+            return -1 * direction;
+        } else {
+            return 1 * direction;
+        }
+    }    
+    return sortedList;
 }
 
 function loadJson() {
@@ -207,8 +261,10 @@ function cleanData(data) {
 function buildList() {
     //Makes a variable out of the filtered students and sends it to displayList()
     const currentList = filtering(allStudents);
+    //Makes a variable out of the sorted students and sends it to displayList()
+    const sortedList = sortList(currentList);
 
-    displayList(currentList);
+    displayList(sortedList);
     console.log(currentList);
 }
 
