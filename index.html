@@ -43,8 +43,10 @@
       </tr>
     </thead> 
   </table>
+  <input type="text" id="searchbar" placeholder="Search for names..">
+  <button class="searchbutton">Search</button>
       <main></main>
-      <template id="animal">
+      <template id="student">
           
         <article class="grid">
           <div class="image">
@@ -58,7 +60,23 @@
         </article>
       </template>
       </section>
-    </section>  
+    </section> 
+    
+    <div id="singleview" class="modal hide">
+      <div class="dialog">
+        <button class="closebutton">X</button>
+        <h1>Student details</h1>
+        <img data-single="photo" src="" alt="">
+        <h4 data-single="firstname">First name</h4>
+        <h4 data-single="middlename">Middle name</h4>
+        <h4 data-single="lastname">Last name</h4>
+        <h4 data-single="nickname">Nick name</h4>
+        <h4 data-single="house">House</h4>
+        <h4 data-single="gender">Gender</h4>
+        <h4>Blood status</h4>
+        <button id="expell">Expell student<span data-field="winnera">A</span></button>
+      </div>
+    </div>
     <script src="index.js"></script>
     
 </body>

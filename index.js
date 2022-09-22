@@ -64,7 +64,6 @@ function filtering(filteredList) {
     return filteredList;
 }
 
-
 function isGryffindor(student) {
     return student.house === "Gryffindor";
 }
@@ -80,6 +79,8 @@ function isSlytherin(student) {
 function isRavenclaw(student) {
     return student.house === "Ravenclaw";
 }
+
+
 
 function selectSort(event) {
 
@@ -110,7 +111,6 @@ function setSort(sortBy, sortDir) {
     buildList();
 }
 
-
 function sortList(sortedList) { 
     let direction = 1;
     if (settings.sortDir === "desc") {
@@ -129,6 +129,8 @@ function sortList(sortedList) {
     }    
     return sortedList;
 }
+
+
 
 function loadJson() {
     //fetching json document
@@ -182,10 +184,9 @@ function prepareObjects(jsonData) {
 
         //Nick name
         function prepareNickName() {
-            // console.log(splitArray.indexOf(' " '));
-            // if (middleName.contains("\"")) {
-            //     const nickname = splitArray.length - 2;
-            //     const nickNameToString = splitArray[nickname];
+            // const middlename = splitArray.length - 2;
+            // const middleNameToString = splitArray[middlename];
+            // if (NameToString.search(/"/) === 0) {
             //     const cleanedNickName = cleanData(nickNameToString);
             //     return cleanedNickName;
             // }
@@ -229,7 +230,6 @@ function prepareObjects(jsonData) {
     })
     
 }
-console.log(allStudents);
 
 function cleanData(data) {
     const dataToClean = data;
@@ -246,6 +246,10 @@ function cleanData(data) {
         if (data.indexOf("-") === -1) {
             const casedData = data.substring(0, 1).toUpperCase() + data.substring(1).toLowerCase();
             return casedData;
+        // } else if (data.search(/"/) === 0) {
+        //     const casedData = data.substring(1, 2).toUpperCase() + data.substring(2).toLowerCase();
+        //     console.log(caseData);
+        //     return casedData;
         } else {
             const firstCasedName = data.substring(0, 1).toUpperCase() + data.substring(1, data.indexOf("-") + 1).toLowerCase();
             const secondCasedName = data.substring(data.indexOf("-") + 1, data.indexOf("-") + 2).toUpperCase() + data.substring(data.indexOf("-") + 2).toLowerCase();
@@ -258,6 +262,25 @@ function cleanData(data) {
 }
 
 
+// function searchForStudents(sortedList) {
+//     const input = document.getElementById('searchbar');
+//     const button = document.querySelector(".searchbutton");
+//     const filter = input.value;
+//     let i;
+//     console.log(sortedList);
+//     button.addEventListener("click", startSearch);
+
+//     function startSearch() {
+//         for (i = 0; i < sortedList.length; i++) {
+//             if (filter === sortedList.firstname) {
+//                 console.log("true");
+//             }
+//         }
+//     }
+
+
+// }
+
 function buildList() {
     //Makes a variable out of the filtered students and sends it to displayList()
     const currentList = filtering(allStudents);
@@ -265,7 +288,8 @@ function buildList() {
     const sortedList = sortList(currentList);
 
     displayList(sortedList);
-    console.log(currentList);
+    
+    return sortedList;
 }
 
 function displayList(allStudents) {
@@ -274,10 +298,12 @@ function displayList(allStudents) {
 
     //builds a new list
     allStudents.forEach(displayStudent);
+
+    // searchForStudents(allStudents);
 }
 
 function displayStudent(student) {
-    const clone = document.querySelector("template#animal").content.cloneNode(true);
+    const clone = document.querySelector("template#student").content.cloneNode(true);
 
     // set clone data
     if (student.middlename === undefined) {
@@ -285,7 +311,14 @@ function displayStudent(student) {
     } else {
         clone.querySelector("[data-field=firstname]").textContent = `Name: ${student.firstname} ${student.middlename} ${student.lastname}`
     }
-    clone.querySelector("[data-field=photo]").src = "images/" + student.lastname + "_" + student.firstname.substring(0,1) + ".png";
+
+    if (student.lastname !== undefined && student.lastname.indexOf("-") !== -1) {
+        clone.querySelector("[data-field=photo]").src = "images/" + student.lastname.substring(student.lastname.indexOf("-") + 1) + "_" + student.firstname.substring(0, 1) + ".png";
+        
+    } else {
+        clone.querySelector("[data-field=photo]").src = "images/" + student.lastname + "_" + student.firstname.substring(0, 1) + ".png";
+    }
+    
     clone.querySelector("[data-field=gender]").textContent = `Gender: ${student.gender}`;
     clone.querySelector("[data-field=house]").textContent = `House: ${student.house}`;
 
@@ -297,9 +330,47 @@ function displayStudent(student) {
             clone.querySelector(".grid").style.background = "#a9272b";
         } else if (student.house === "Ravenclaw") {
         clone.querySelector(".grid").style.background = "#383c96";
-        }
+    }
+    clone.querySelector(".grid").addEventListener("click",  () => displayStudentDetails(student));
+
     document.querySelector("main").appendChild(clone);
     
+}
+
+function displayStudentDetails(student) {
+    document.querySelector("#singleview").classList.remove("hide");
+
+    document.querySelector("[data-single=firstname]").textContent = `First name: ${student.firstname}`
+    if (student.middlename === undefined) {
+        document.querySelector("[data-single=middlename]").textContent = `Middle name: -`
+    } else {
+        document.querySelector("[data-single=middlename]").textContent = `Middle name: ${student.middlename}`
+    }
+    document.querySelector("[data-single=lastname]").textContent = `Last name: ${student.lastname}`
+    if (student.lastname !== undefined && student.lastname.indexOf("-") !== -1) {
+        document.querySelector("[data-single=photo]").src = "images/" + student.lastname.substring(student.lastname.indexOf("-") + 1) + "_" + student.firstname.substring(0, 1) + ".png";
+        
+    } else {
+        document.querySelector("[data-single=house]").src = "images/" + student.lastname + "_" + student.firstname.substring(0, 1) + ".png";
+    }
+    document.querySelector("[data-single=gender]").textContent = `Gender: ${student.gender}`;
+    document.querySelector("[data-single=house]").textContent = `House: ${student.house}`;
+
+    document.querySelector(".closebutton").addEventListener("click", closeStudentDetails);
+        
+        function closeStudentDetails() {
+            document.querySelector("#singleview").classList.add("hide");
+        }
     
-    
+    if (student.house === "Hufflepuff") {
+            document.querySelector(".dialog").style.background = "#b2a713";
+    } else if (student.house === "Slytherin") {
+            document.querySelector(".dialog").style.background = "#60a963";
+    } else if (student.house === "Gryffindor") {
+            document.querySelector(".dialog").style.background = "#a9272b";
+    } else if (student.house === "Ravenclaw") {
+        document.querySelector(".dialog").style.background = "#383c96";
+    }
+
+
 }

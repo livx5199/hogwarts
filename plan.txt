@@ -16,7 +16,7 @@ Filtering
 
 Sorting
 
-1. Sort based on first names
-2. Sort based on last names
-3. Sort on house
+1. //Sort based on first names
+2. //Sort based on last names
+3. //Sort on house
 4. Sort on prefects
