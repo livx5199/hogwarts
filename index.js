@@ -1,7 +1,7 @@
 "use strict";
 
 window.addEventListener("DOMContentLoaded", init);
-
+const expelledStudents = [];
 const allStudents = [];
 const Student = {
     firstname: "",
@@ -10,7 +10,8 @@ const Student = {
     nickname: undefined,
     house: "",
     photo: "",
-    gender: ""
+    gender: "",
+    expelled: false
 }
 
 const settings = {
@@ -22,12 +23,14 @@ const settings = {
 function init() {
     loadJson();
     registerDropdown();
+    // document.querySelector(".expelledstudents").addEventListener("click", showExpelledStudents);
 }
 
 //Adds eventlistener to dropdown-menu(filtering) and table(sorting)
 function registerDropdown() {
     document.querySelectorAll("[data-action='filter']")
         .forEach(button => button.addEventListener("click", selectFilter));
+
     
         document.querySelectorAll("[data-action='sort']")
         .forEach(button => button.addEventListener("click", selectSort));
@@ -36,9 +39,9 @@ function registerDropdown() {
 //Registers what has been chosen in dropdown
 function selectFilter(event) {
     const filter = event.target.dataset.filter;
-    console.log("user selected", filter);
-    
+    console.log("chose" + filter);
     setFilter(filter);
+    
 }
 
 //Assigns value of filter to the "filterBy" property
@@ -56,8 +59,10 @@ function filtering(filteredList) {
         filteredList = allStudents.filter(isHufflepuff);
     } else if (settings.filterBy === "slytherin") {
         filteredList = allStudents.filter(isSlytherin);
-    }else if (settings.filterBy === "ravenclaw") {
+    } else if (settings.filterBy === "ravenclaw") {
         filteredList = allStudents.filter(isRavenclaw);
+    } else if (settings.filterBy === "expelled") {
+        filteredList = allStudents.filter(isExpelled);
     } else {
         filteredList = allStudents;
 }
@@ -158,7 +163,19 @@ function prepareObjects(jsonData) {
         const nickName = prepareNickName();
         const house = prepareHouse();
         const gender = prepareGender();
+        const photo = preparePhoto();
 
+        //Photo
+        function preparePhoto() {
+            if (lastName !== undefined && lastName.indexOf("-") !== -1) {
+                const photoData = "images/" + lastName.substring(lastName.indexOf("-") + 1) + "_" + firstName.substring(0, 1) + ".png";
+                return photoData;
+            } else {
+                const photoData = "images/" + lastName + "_" + firstName.substring(0, 1) + ".png";
+                return photoData;
+            }
+                
+        }
         
         //First name
         function prepareFirstName() {
@@ -221,7 +238,7 @@ function prepareObjects(jsonData) {
         student.nickname = nickName;
         student.house = house;
         student.gender = gender;
-        // console.log(student.middlename);
+        student.photo = photo;
             
         //Push objects to allStudents
         allStudents.push(student);
@@ -288,6 +305,7 @@ function buildList() {
     const sortedList = sortList(currentList);
 
     displayList(sortedList);
+    console.log(currentList);
     
     return sortedList;
 }
@@ -312,13 +330,7 @@ function displayStudent(student) {
         clone.querySelector("[data-field=firstname]").textContent = `Name: ${student.firstname} ${student.middlename} ${student.lastname}`
     }
 
-    if (student.lastname !== undefined && student.lastname.indexOf("-") !== -1) {
-        clone.querySelector("[data-field=photo]").src = "images/" + student.lastname.substring(student.lastname.indexOf("-") + 1) + "_" + student.firstname.substring(0, 1) + ".png";
-        
-    } else {
-        clone.querySelector("[data-field=photo]").src = "images/" + student.lastname + "_" + student.firstname.substring(0, 1) + ".png";
-    }
-    
+    clone.querySelector("[data-field=photo]").src = student.photo;
     clone.querySelector("[data-field=gender]").textContent = `Gender: ${student.gender}`;
     clone.querySelector("[data-field=house]").textContent = `House: ${student.house}`;
 
@@ -334,28 +346,22 @@ function displayStudent(student) {
     clone.querySelector(".grid").addEventListener("click",  () => displayStudentDetails(student));
 
     document.querySelector("main").appendChild(clone);
-    
 }
 
 function displayStudentDetails(student) {
     document.querySelector("#singleview").classList.remove("hide");
 
     document.querySelector("[data-single=firstname]").textContent = `First name: ${student.firstname}`
+
     if (student.middlename === undefined) {
         document.querySelector("[data-single=middlename]").textContent = `Middle name: -`
     } else {
         document.querySelector("[data-single=middlename]").textContent = `Middle name: ${student.middlename}`
     }
     document.querySelector("[data-single=lastname]").textContent = `Last name: ${student.lastname}`
-    if (student.lastname !== undefined && student.lastname.indexOf("-") !== -1) {
-        document.querySelector("[data-single=photo]").src = "images/" + student.lastname.substring(student.lastname.indexOf("-") + 1) + "_" + student.firstname.substring(0, 1) + ".png";
-        
-    } else {
-        document.querySelector("[data-single=house]").src = "images/" + student.lastname + "_" + student.firstname.substring(0, 1) + ".png";
-    }
+    document.querySelector("[data-single=photo]").src = student.photo;
     document.querySelector("[data-single=gender]").textContent = `Gender: ${student.gender}`;
     document.querySelector("[data-single=house]").textContent = `House: ${student.house}`;
-
     document.querySelector(".closebutton").addEventListener("click", closeStudentDetails);
         
         function closeStudentDetails() {
@@ -372,5 +378,14 @@ function displayStudentDetails(student) {
         document.querySelector(".dialog").style.background = "#383c96";
     }
 
+    document.querySelector("#expell").addEventListener("click", () => expellStudent(student));
+}
 
+function expellStudent(student) {
+    student.expelled = true;
+    // document.querySelector("[data-single-expelled]").textContent = "EXPELLED";
+}
+
+function isExpelled(student) {
+    return student.expelled === true;
 }
