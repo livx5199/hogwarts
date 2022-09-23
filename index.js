@@ -1,8 +1,11 @@
 "use strict";
 
 window.addEventListener("DOMContentLoaded", init);
-const expelledStudents = [];
+
+const pureBloods = [];
+const halfBloods = [];
 const allStudents = [];
+
 const Student = {
     firstname: "",
     middlename: "",
@@ -11,8 +14,14 @@ const Student = {
     house: "",
     photo: "",
     gender: "",
+    bloodstatus: "",
     expelled: false,
     prefect: false
+}
+
+const Bloodstatus = {
+    lastname: "",
+    pure: true
 }
 
 const settings = {
@@ -22,7 +31,8 @@ const settings = {
 }
 
 function init() {
-    loadJson();
+    loadStudentsJson();
+    loadFamiliesJson();
     registerDropdown();
     // document.querySelector(".expelledstudents").addEventListener("click", showExpelledStudents);
 }
@@ -86,8 +96,6 @@ function isRavenclaw(student) {
     return student.house === "Ravenclaw";
 }
 
-
-
 function selectSort(event) {
 
     //Applies target data to sortBy and sortDir properties
@@ -136,17 +144,37 @@ function sortList(sortedList) {
     return sortedList;
 }
 
-
-
-function loadJson() {
+async function loadStudentsJson() {
     //fetching json document
-    fetch("students.json")
-        //responding to fetch
-        .then(response => response.json())
-        //taking the rendered json data and sending it to prepareObjects-function
-        .then(jsonData => {
-            prepareObjects(jsonData);
-        });
+    const response = await fetch("students.json");
+    const data = await response.json();
+    prepareObjects(data);
+}
+
+async function loadFamiliesJson() {
+    const response = await fetch("https://petlatkea.dk/2021/hogwarts/families.json");
+    const data = await response.json();
+    prepareBloodStatusData(data);
+}
+
+function prepareBloodStatusData(data) {
+    const pureBloodArray = data.pure;
+    const halfBloodArray = data.half;
+
+    pureBloodArray.forEach(name => {
+        const bloodstatus = Object.create(Bloodstatus);
+        bloodstatus.lastname = name;
+        bloodstatus.pure = true;
+        pureBloods.push(bloodstatus);
+    })
+        
+    halfBloodArray.forEach(name => {
+        const bloodstatus = Object.create(Bloodstatus);
+        bloodstatus.lastname = name;
+        bloodstatus.pure = false;
+        halfBloods.push(bloodstatus);
+
+    })
 }
 
 function prepareObjects(jsonData) {
@@ -165,6 +193,7 @@ function prepareObjects(jsonData) {
         const house = prepareHouse();
         const gender = prepareGender();
         const photo = preparePhoto();
+        const bloodStatus = prepareBloodStatus(student);
 
         //Photo
         function preparePhoto() {
@@ -240,13 +269,30 @@ function prepareObjects(jsonData) {
         student.house = house;
         student.gender = gender;
         student.photo = photo;
+        student.bloodstatus = bloodStatus;
+        console.log(bloodStatus);
             
         //Push objects to allStudents
         allStudents.push(student);
         // console.log(allStudents);
         displayList(allStudents);
+
     })
     
+}
+
+function prepareBloodStatus(student) {
+
+    if (student.lastname === pureBloods.lastname && student.lastname === halfBloods.lastname) {
+        const bloodStatus = "pureblood";
+        return bloodStatus;
+    } else if (student.lastname === pureBloods.lastname && student.lastname !== halfBloods.lastname) {
+        const bloodStatus = "pureblood";
+        return bloodStatus;
+    } else {
+        const bloodStatus = "halfblood";
+        return bloodStatus;
+    }
 }
 
 function cleanData(data) {
@@ -278,6 +324,8 @@ function cleanData(data) {
     
     return trimmedAndCasedData;
 }
+
+
 
 
 // function searchForStudents(sortedList) {
@@ -334,6 +382,7 @@ function displayStudent(student) {
     clone.querySelector("[data-field=photo]").src = student.photo;
     clone.querySelector("[data-field=gender]").textContent = `Gender: ${student.gender}`;
     clone.querySelector("[data-field=house]").textContent = `House: ${student.house}`;
+    clone.querySelector("[data-field=blood]").textContent = `Bloodstatus: ${student.bloodstatus}`;
 
     if (student.house === "Hufflepuff") {
             clone.querySelector(".grid").style.background = "#b2a713";
