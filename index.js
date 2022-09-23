@@ -11,7 +11,8 @@ const Student = {
     house: "",
     photo: "",
     gender: "",
-    expelled: false
+    expelled: false,
+    prefect: false
 }
 
 const settings = {
@@ -343,9 +344,88 @@ function displayStudent(student) {
         } else if (student.house === "Ravenclaw") {
         clone.querySelector(".grid").style.background = "#383c96";
     }
-    clone.querySelector(".grid").addEventListener("click",  () => displayStudentDetails(student));
+
+    //Prefects
+    clone.querySelector("[data-field=prefect]").dataset.prefect = student.prefect;
+
+    clone.querySelector("[data-field=prefect]").addEventListener("click", clickPrefect);
+
+    function clickPrefect() {
+        if (student.prefect === true) {
+            student.prefect = false;
+        } else {
+            tryToMakeAPrefect(student);
+        }
+
+        buildList();
+    }
+
+    clone.querySelector(".details").addEventListener("click",  () => displayStudentDetails(student));
 
     document.querySelector("main").appendChild(clone);
+}
+
+function tryToMakeAPrefect(selectedStudent) {
+
+    const prefects = allStudents.filter(student => student.prefect === true);
+    const sameHouse = prefects.filter(student => student.house === selectedStudent.house);
+    console.log(sameHouse);
+
+    if (sameHouse.length > 1) {
+        console.log("There can only be two prefects of each house");
+        removeAOrB(sameHouse[0], sameHouse[1]);
+    
+    } else {
+        makePrefect(selectedStudent);
+        console.log(`${selectedStudent.firstname} becomes prefect`);
+        
+        
+    }
+
+
+    function removeAOrB(prefectA, prefectB) {
+        //ask user to ignore or remove a or b
+        document.querySelector("#remove_aorb").classList.remove("hide");
+        document.querySelector("#remove_aorb .closebutton").addEventListener("click", closeDialog);
+
+        document.querySelector("#remove_aorb #removea").addEventListener("click", clickRemoveA);
+        document.querySelector("#remove_aorb #removeb").addEventListener("click", clickRemoveB);
+
+        document.querySelector("#remove_aorb [data-field=prefecta]").textContent = prefectA.firstname;
+        document.querySelector("#remove_aorb [data-field=prefectb]").textContent = prefectB.firstname;
+
+        function closeDialog() {
+            document.querySelector("#remove_aorb").classList.add("hide");
+            document.querySelector("#remove_aorb .closebutton").removeEventListener("click", closeDialog);
+
+            document.querySelector("#remove_aorb #removea").removeEventListener("click", clickRemoveA);
+            document.querySelector("#remove_aorb #removeb").removeEventListener("click", clickRemoveB);
+        }
+
+        function clickRemoveA() {
+            removePrefect(prefectA);
+            makePrefect(selectedStudent);
+            buildList();
+            closeDialog();
+        }
+
+        function clickRemoveB() {
+            removePrefect(prefectB);
+            makePrefect(selectedStudent);
+            buildList();
+            closeDialog();
+        }
+    }
+
+    function removePrefect(prefectStudent) {
+        prefectStudent.prefect = false;
+        console.log(prefectStudent);
+    }
+
+    function makePrefect(student) {
+        student.prefect = true;
+        console.log(sameHouse);
+    }
 }
 
 function displayStudentDetails(student) {

@@ -60,6 +60,14 @@ h1 {
   content: " ▼";
 }
 
+td[data-field="prefect"]::after {
+  content: "🏆";
+}
+
+td[data-field="winner"][data-prefect="false"]::after {
+  filter: grayscale(1);
+}
+
 .modal {
   position: fixed;
   top: 0;
