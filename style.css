@@ -88,6 +88,11 @@ td[data-field="winner"][data-prefect="false"]::after {
   position: relative;
 }
 
+.detailswindow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
 button.closebutton {
   position: absolute;
   right: -1em;

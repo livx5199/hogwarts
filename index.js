@@ -20,9 +20,18 @@ const Student = {
     inquisitorial: false
 }
 
-const Bloodstatus = {
+const Hackedstudent = {
+    firstname: "",
+    middlename: "",
     lastname: "",
-    pure: true
+    nickname: undefined,
+    house: "",
+    photo: "",
+    gender: "",
+    bloodstatus: "",
+    expelled: false,
+    prefect: false,
+    inquisitorial: false
 }
 
 const settings = {
@@ -146,7 +155,7 @@ function sortList(sortedList) {
 
 function loadStudentsJson() {
     //fetching json document
-    fetch("students.json")
+    fetch("https://petlatkea.dk/2021/hogwarts/students.json")
     .then( response => response.json() )
     .then( jsonData => {
         // when loaded, prepare objects
@@ -201,6 +210,9 @@ function prepareObjects(jsonData) {
         function preparePhoto() {
             if (lastName !== undefined && lastName.indexOf("-") !== -1) {
                 const photoData = "images/" + lastName.substring(lastName.indexOf("-") + 1) + "_" + firstName.substring(0, 1) + ".png";
+                return photoData;
+            } else if (lastName === "Patil") {
+                const photoData = "images/" + lastName + "_" + firstName.substring(0) + ".png";
                 return photoData;
             } else {
                 const photoData = "images/" + lastName + "_" + firstName.substring(0, 1) + ".png";
@@ -474,14 +486,14 @@ function tryToMakeInquisitorialSquad(selectedStudent) {
     function notElligibleForInquisitorialSquad() {
         document.querySelector("#inquisitorial").classList.remove("hide");
         document.querySelector("#inquisitorial .closebutton").addEventListener("click", closeInquisitorialDialog);
-        document.querySelector("#okbutton").addEventListener("click", closeInquisitorialDialog);
+        document.querySelector("#inquisitorial .okbutton").addEventListener("click", closeInquisitorialDialog);
 
     }
 
     function closeInquisitorialDialog() {
         document.querySelector("#inquisitorial").classList.add("hide");
         document.querySelector("#inquisitorial .closebutton").removeEventListener("click", closeInquisitorialDialog);
-            document.querySelector("#okbutton").removeEventListener("click", closeInquisitorialDialog);
+            document.querySelector("#inquisitorial .okbutton").removeEventListener("click", closeInquisitorialDialog);
     }
 
     function makeInquisitorialSquad(student) {
@@ -523,10 +535,76 @@ function displayStudentDetails(student) {
 }
 
 function expellStudent(student) {
-    student.expelled = true;
+    // const hackedStudent = makeHackedStudent();
+    // console.log(hackedStudent);
+    // console.log(student);
+
+    if (student.lastname === "Thrane") {
+        console.log(student);
+        cannotBeExpelled();  
+    } else {
+        console.log(student, " is expelled")
+        makeExpelled(student);
+    }
+
+    function cannotBeExpelled() {
+        console.log("it goes here");
+        document.querySelector("#cannotbeexpelled").classList.remove("hide");
+        document.querySelector("#cannotbeexpelled .closebutton").addEventListener("click", closeExpulsionDialog);
+        document.querySelector("#cannotbeexpelled .okbutton").addEventListener("click", closeExpulsionDialog);
+    
+
+        function closeExpulsionDialog() {
+            document.querySelector("#cannotbeexpelled").classList.add("hide");
+            document.querySelector("#cannotbeexpelled .closebutton").removeEventListener("click", closeExpulsionDialog);
+            document.querySelector("#cannotbeexpelled .okbutton").removeEventListener("click", closeExpulsionDialog);
+        }
+    }
+
+    function makeExpelled(student) {
+        student.expelled = true;
+    }
+    
     // document.querySelector("[data-single-expelled]").textContent = "EXPELLED";
 }
 
 function isExpelled(student) {
     return student.expelled === true;
+}
+
+function hackTheSystem() {
+    
+    //Add hacked student to student list
+    const hackedStudent = makeHackedStudent();
+    allStudents.push(hackedStudent);
+    console.log(allStudents);
+
+    //Messing with bloodstatus
+    allStudents.forEach(student => {
+        const bloodtypes = ["Pureblood", "Halfblood"];
+        const value = bloodtypes[Math.floor(Math.random() * bloodtypes.length)];
+            if (student.bloodstatus === "Pureblood") {
+                student.bloodstatus = value;
+                console.log(student.bloodstatus);
+            } else {
+                student.bloodstatus = "Pureblood";
+            }
+    })
+}
+
+function makeHackedStudent() {
+    const hackedStudent = Object.create(Hackedstudent);
+
+    hackedStudent.firstname = "Liv";
+    hackedStudent.middlename = "Lilholt";
+    hackedStudent.lastname = "Thrane";
+    hackedStudent.nickname = undefined;
+    hackedStudent.house = "Slytherin";
+    hackedStudent.photo = "";
+    hackedStudent.gender = "girl";
+    hackedStudent.bloodstatus = "Halfblood";
+    hackedStudent.expelled = false;
+    hackedStudent.prefect = false;
+    hackedStudent.inquisitorial = false;
+    return hackedStudent;
 }

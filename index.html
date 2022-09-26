@@ -72,16 +72,18 @@
       <div class="dialog">
         <button class="closebutton">X</button>
         <h1>Student details</h1>
-        <img data-single="photo" src="" alt="">
-        <h4 data-single="firstname">First name</h4>
-        <h4 data-single="middlename">Middle name</h4>
-        <h4 data-single="lastname">Last name</h4>
-        <h4 data-single="nickname">Nick name</h4>
-        <h4 data-single="house">House</h4>
-        <h4 data-single="gender">Gender</h4>
-        <h4 data-single="expelled" style="color: red;"></h4>
-        <h4>Blood status</h4>
-        <button id="expell">Expell student<span data-field="prefecta">A</span></button>
+        <div class="detailswindow">
+          <img data-single="photo" src="" alt="">
+          <h4 data-single="firstname">First name</h4>
+          <h4 data-single="middlename">Middle name</h4>
+          <h4 data-single="lastname">Last name</h4>
+          <h4 data-single="nickname">Nick name</h4>
+          <h4 data-single="house">House</h4>
+          <h4 data-single="gender">Gender</h4>
+          <h4 data-single="expelled" style="color: red;"></h4>
+          <h4>Blood status</h4>
+          <button id="expell">Expell student<span data-field="prefecta">A</span></button>
+        </div>
       </div>
     </div>
     <script src="index.js"></script>
@@ -101,9 +103,17 @@
         <button class="closebutton">X</button>
         <h1>Warning</h1>
         <p>The student is not elligible for the Inquisitorial Squad.</p>
-        <button id="okbutton">OK</button>
+        <button class="okbutton">OK</button>
       </div>
     </div>
     
+    <div id="cannotbeexpelled" class="modal hide">
+      <div class="dialog">
+        <button class="closebutton">X</button>
+        <h1>Warning</h1>
+        <p>The student cannot be expelled.</p>
+        <button class="okbutton">OK</button>
+      </div>
+    </div>
 </body>
 </html>
