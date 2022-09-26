@@ -16,7 +16,8 @@ const Student = {
     gender: "",
     bloodstatus: "",
     expelled: false,
-    prefect: false
+    prefect: false,
+    inquisitorial: false
 }
 
 const Bloodstatus = {
@@ -388,7 +389,14 @@ function displayStudent(student) {
     }
 
     //Inquisitorial squad
-    function clickInquisitorial() {}
+    clone.querySelector("[data-field=inquisitorial]").addEventListener("click", clickInquisitorial);
+    function clickInquisitorial() {
+        if (student.inquisitorial === true) {
+            student.inquisitorial = false;
+        } else {
+            tryToMakeInquisitorialSquad(student);
+        }
+    }
 
     clone.querySelector(".details").addEventListener("click",  () => displayStudentDetails(student));
 
@@ -413,7 +421,7 @@ function tryToMakeAPrefect(selectedStudent) {
     function removeAOrB(prefectA, prefectB) {
         //ask user to ignore or remove a or b
         document.querySelector("#remove_aorb").classList.remove("hide");
-        document.querySelector("#remove_aorb .closebutton").addEventListener("click", closeDialog);
+        document.querySelector("#remove_aorb .closebutton").addEventListener("click", closeAorBDialog);
 
         document.querySelector("#remove_aorb #removea").addEventListener("click", clickRemoveA);
         document.querySelector("#remove_aorb #removeb").addEventListener("click", clickRemoveB);
@@ -421,9 +429,9 @@ function tryToMakeAPrefect(selectedStudent) {
         document.querySelector("#remove_aorb [data-field=prefecta]").textContent = prefectA.firstname;
         document.querySelector("#remove_aorb [data-field=prefectb]").textContent = prefectB.firstname;
 
-        function closeDialog() {
+        function closeAorBDialog() {
             document.querySelector("#remove_aorb").classList.add("hide");
-            document.querySelector("#remove_aorb .closebutton").removeEventListener("click", closeDialog);
+            document.querySelector("#remove_aorb .closebutton").removeEventListener("click", closeAorBDialog);
 
             document.querySelector("#remove_aorb #removea").removeEventListener("click", clickRemoveA);
             document.querySelector("#remove_aorb #removeb").removeEventListener("click", clickRemoveB);
@@ -433,14 +441,14 @@ function tryToMakeAPrefect(selectedStudent) {
             removePrefect(prefectA);
             makePrefect(selectedStudent);
             // buildList();
-            closeDialog();
+            closeAorBDialog();
         }
 
         function clickRemoveB() {
             removePrefect(prefectB);
             makePrefect(selectedStudent);
             // buildList();
-            closeDialog();
+            closeAorBDialog();
         }
     }
 
@@ -452,6 +460,32 @@ function tryToMakeAPrefect(selectedStudent) {
     function makePrefect(student) {
         student.prefect = true;
         console.log(sameHouse);
+    }
+}
+
+function tryToMakeInquisitorialSquad(selectedStudent) {
+    if (selectedStudent.bloodstatus === "Pureblood" || selectedStudent.house === "Slytherin") {
+        makeInquisitorialSquad(selectedStudent);
+        console.log(selectedStudent);
+    } else {
+        notElligibleForInquisitorialSquad();
+    }
+
+    function notElligibleForInquisitorialSquad() {
+        document.querySelector("#inquisitorial").classList.remove("hide");
+        document.querySelector("#inquisitorial .closebutton").addEventListener("click", closeInquisitorialDialog);
+        document.querySelector("#okbutton").addEventListener("click", closeInquisitorialDialog);
+
+    }
+
+    function closeInquisitorialDialog() {
+        document.querySelector("#inquisitorial").classList.add("hide");
+        document.querySelector("#inquisitorial .closebutton").removeEventListener("click", closeInquisitorialDialog);
+            document.querySelector("#okbutton").removeEventListener("click", closeInquisitorialDialog);
+    }
+
+    function makeInquisitorialSquad(student) {
+        student.inquisitorial = true;
     }
 }
 
