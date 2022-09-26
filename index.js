@@ -5,22 +5,9 @@ window.addEventListener("DOMContentLoaded", init);
 const pureBloods = [];
 const halfBloods = [];
 const allStudents = [];
+let isHackOngoing = false;
 
 const Student = {
-    firstname: "",
-    middlename: "",
-    lastname: "",
-    nickname: undefined,
-    house: "",
-    photo: "",
-    gender: "",
-    bloodstatus: "",
-    expelled: false,
-    prefect: false,
-    inquisitorial: false
-}
-
-const Hackedstudent = {
     firstname: "",
     middlename: "",
     lastname: "",
@@ -498,6 +485,18 @@ function tryToMakeInquisitorialSquad(selectedStudent) {
 
     function makeInquisitorialSquad(student) {
         student.inquisitorial = true;
+        
+        if (isHackOngoing = true) {
+            
+            const inquisitorialTimeout = setTimeout(() => {
+                removeInquisitorialSquad(student);
+            }, 5000);
+        }
+    }
+
+    function removeInquisitorialSquad(student) {
+        student.inquisitorial = false;
+        console.log(student.inquisitorial);
     }
 }
 
@@ -573,6 +572,8 @@ function isExpelled(student) {
 }
 
 function hackTheSystem() {
+
+    isHackOngoing = true;
     
     //Add hacked student to student list
     const hackedStudent = makeHackedStudent();
@@ -593,7 +594,7 @@ function hackTheSystem() {
 }
 
 function makeHackedStudent() {
-    const hackedStudent = Object.create(Hackedstudent);
+    const hackedStudent = Object.create(Student);
 
     hackedStudent.firstname = "Liv";
     hackedStudent.middlename = "Lilholt";
