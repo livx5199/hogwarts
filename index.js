@@ -32,7 +32,6 @@ const settings = {
 
 function init() {
     loadStudentsJson();
-    loadFamiliesJson();
     registerDropdown();
     // document.querySelector(".expelledstudents").addEventListener("click", showExpelledStudents);
 }
@@ -144,37 +143,39 @@ function sortList(sortedList) {
     return sortedList;
 }
 
-async function loadStudentsJson() {
+function loadStudentsJson() {
     //fetching json document
-    const response = await fetch("students.json");
-    const data = await response.json();
-    prepareObjects(data);
+    fetch("students.json")
+    .then( response => response.json() )
+    .then( jsonData => {
+        // when loaded, prepare objects
+        prepareObjects( jsonData );
+    });
 }
 
-async function loadFamiliesJson() {
-    const response = await fetch("https://petlatkea.dk/2021/hogwarts/families.json");
-    const data = await response.json();
-    prepareBloodStatusData(data);
+function loadFamiliesJson() {
+    fetch("https://petlatkea.dk/2021/hogwarts/families.json")
+    .then( response => response.json() )
+    .then( jsonData => {
+   prepareBloodStatusData(jsonData);
+    });
 }
 
 function prepareBloodStatusData(data) {
-    const pureBloodArray = data.pure;
-    const halfBloodArray = data.half;
 
-    pureBloodArray.forEach(name => {
-        const bloodstatus = Object.create(Bloodstatus);
-        bloodstatus.lastname = name;
-        bloodstatus.pure = true;
-        pureBloods.push(bloodstatus);
-    })
-        
-    halfBloodArray.forEach(name => {
-        const bloodstatus = Object.create(Bloodstatus);
-        bloodstatus.lastname = name;
-        bloodstatus.pure = false;
-        halfBloods.push(bloodstatus);
+   
+    for (let i = 0; i < allStudents.length; i++) {
+        allStudents[i].bloodstatus = "Halfblood";
+        for (let j = 0; j < data.pure.length; j++){
+            if (allStudents[i].lastname === data.pure[j]) {
+                allStudents[i].bloodstatus = "Pureblood";
+                break;
+            }
+        }
+buildList();
+    }
 
-    })
+    
 }
 
 function prepareObjects(jsonData) {
@@ -193,7 +194,7 @@ function prepareObjects(jsonData) {
         const house = prepareHouse();
         const gender = prepareGender();
         const photo = preparePhoto();
-        const bloodStatus = prepareBloodStatus(student);
+        // const bloodStatus = prepareBloodStatus(student);
 
         //Photo
         function preparePhoto() {
@@ -203,8 +204,7 @@ function prepareObjects(jsonData) {
             } else {
                 const photoData = "images/" + lastName + "_" + firstName.substring(0, 1) + ".png";
                 return photoData;
-            }
-                
+            }        
         }
         
         //First name
@@ -269,30 +269,13 @@ function prepareObjects(jsonData) {
         student.house = house;
         student.gender = gender;
         student.photo = photo;
-        student.bloodstatus = bloodStatus;
-        console.log(bloodStatus);
             
         //Push objects to allStudents
         allStudents.push(student);
-        // console.log(allStudents);
         displayList(allStudents);
+        loadFamiliesJson();
 
     })
-    
-}
-
-function prepareBloodStatus(student) {
-
-    if (student.lastname === pureBloods.lastname && student.lastname === halfBloods.lastname) {
-        const bloodStatus = "pureblood";
-        return bloodStatus;
-    } else if (student.lastname === pureBloods.lastname && student.lastname !== halfBloods.lastname) {
-        const bloodStatus = "pureblood";
-        return bloodStatus;
-    } else {
-        const bloodStatus = "halfblood";
-        return bloodStatus;
-    }
 }
 
 function cleanData(data) {
@@ -325,9 +308,6 @@ function cleanData(data) {
     return trimmedAndCasedData;
 }
 
-
-
-
 // function searchForStudents(sortedList) {
 //     const input = document.getElementById('searchbar');
 //     const button = document.querySelector(".searchbutton");
@@ -352,9 +332,7 @@ function buildList() {
     const currentList = filtering(allStudents);
     //Makes a variable out of the sorted students and sends it to displayList()
     const sortedList = sortList(currentList);
-
     displayList(sortedList);
-    console.log(currentList);
     
     return sortedList;
 }
@@ -406,8 +384,11 @@ function displayStudent(student) {
             tryToMakeAPrefect(student);
         }
 
-        buildList();
+        // buildList();
     }
+
+    //Inquisitorial squad
+    function clickInquisitorial() {}
 
     clone.querySelector(".details").addEventListener("click",  () => displayStudentDetails(student));
 
@@ -423,12 +404,9 @@ function tryToMakeAPrefect(selectedStudent) {
     if (sameHouse.length > 1) {
         console.log("There can only be two prefects of each house");
         removeAOrB(sameHouse[0], sameHouse[1]);
-    
     } else {
         makePrefect(selectedStudent);
-        console.log(`${selectedStudent.firstname} becomes prefect`);
-        
-        
+        console.log(`${selectedStudent.firstname} becomes prefect`); 
     }
 
 
@@ -454,14 +432,14 @@ function tryToMakeAPrefect(selectedStudent) {
         function clickRemoveA() {
             removePrefect(prefectA);
             makePrefect(selectedStudent);
-            buildList();
+            // buildList();
             closeDialog();
         }
 
         function clickRemoveB() {
             removePrefect(prefectB);
             makePrefect(selectedStudent);
-            buildList();
+            // buildList();
             closeDialog();
         }
     }
