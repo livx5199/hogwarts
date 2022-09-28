@@ -42,6 +42,8 @@ function registerButtonsAndDropdown() {
             .forEach(button => button.addEventListener("click", selectSort));
     document.querySelector("input").addEventListener("input", searchForStudents);
 
+    document.querySelector("#hackbutton").addEventListener("click", hackTheSystem);
+
 }
 
 //Registers what has been chosen in dropdown
@@ -49,10 +51,6 @@ function selectFilter(event) {
     const filter = event.target.dataset.filter;
     console.log("chose" + filter);
     setFilter(filter);
-
-    if (filter === "search") {
-        searchForStudents(filter);
-    }
     
 }
 
@@ -104,8 +102,6 @@ function isRavenclaw(student) {
 }
 
 function selectSort(event) {
-
-    isSortingOngoing = true;
 
     //Applies target data to sortBy and sortDir properties
     const sortBy = event.target.dataset.sort;
@@ -209,16 +205,16 @@ function prepareObjects(jsonData) {
         //Photo
         function preparePhoto() {
             if (lastName !== undefined && lastName.indexOf("-") !== -1) {
-                const photoData = "./images/" + lastName.substring(lastName.indexOf("-") + 1) + "_" + firstName.substring(0, 1) + ".png";
+                const photoData = "./images/" + lastName.substring(lastName.indexOf("-") + 1).toLowerCase() + "_" + firstName.substring(0, 1).toLowerCase() + ".png";
                 return photoData;
             } else if (lastName === "Patil") {
-                const photoData = "./images/" + lastName + "_" + firstName.substring(0) + ".png";
+                const photoData = "./images/" + lastName.toLowerCase() + "_" + firstName.substring(0).toLowerCase() + ".png";
                 return photoData;
             } else if (lastName === "Leanne") {
                 const photoData = "./no photo.png";
                 return photoData;
             } else {
-                const photoData = "./images/" + lastName + "_" + firstName.substring(0, 1) + ".png";
+                const photoData = "./images/" + lastName.toLowerCase() + "_" + firstName.substring(0, 1).toLowerCase() + ".png";
                 return photoData;
             }        
         }
@@ -345,10 +341,6 @@ function searchForStudents() {
     }
 
     displayList(searchedStudents);
-}
-
-function isSearchedFor(student) {
-    return student.searched === true;
 }
 
 function buildList() {
