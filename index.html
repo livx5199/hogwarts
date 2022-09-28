@@ -12,108 +12,164 @@
 </head>
 <body>
   <section id="headsection">
-    <img src="images/Hogwartscrest.webp" alt="hogwartslogo">
-    <h1>HOGWARTS</h1>
-    <h3>School of witchcraft & wizardry</h3>
+    <img src="/logo.png" alt="hogwartslogo">
+    <h1>hogwarts</h1>
+    <h2 class="slogan">school of witchcraft & wizardry</h2>
   </section>
 
+
+
   <section id="admin-section"> 
+
+        <!-- Sorting & Searching -->
+    <section id="sortsearch">
+      <div id="sortsection">
+        <table>
+          <label for="sorting">Sort by:</label> 
+          <thead> 
+             
+            <tr name="sorting" id="sorting">
+              <th data-action="sort" data-sort-direction="asc" data-sort="firstname">First name</th>
+              <th data-action="sort" data-sort-direction="asc" data-sort="lastname">Last name</th>
+              <th data-action="sort" data-sort-direction="asc" data-sort="house">House</th>
+            </tr>
+          </thead>
+        </table>
+      </div> 
+      <div id="searchsection">
+        <input type="text" class="filter" data-action="filter" data-filter="search" placeholder="Search for names..">
+      </div>
+    </section>
+
     <section id="leftsection">
-      <label for="filter-house">Filter students by house</label>
+      <h2>Options</h2>
+      <h3>Filter students by house</h3>
 
       <select name="filter-house" id="dropdown">
-        <option class="filter" data-action="filter" data-filter="*">All students</option>
-        <option class="filter" data-action="filter" data-filter="gryffindor">Gryffindor</option>
-        <option class="filter" data-action="filter" data-filter="hufflepuff">Hufflepuff</option>
-        <option class="filter" data-action="filter" data-filter="slytherin">Slytherin</option>
-        <option class="filter" data-action="filter" data-filter="ravenclaw">Ravenclaw</option>
+          <option class="filter" data-action="filter" data-filter="*">All students</option>
+          <option class="filter" data-action="filter" data-filter="gryffindor">Gryffindor</option>
+          <option class="filter" data-action="filter" data-filter="hufflepuff">Hufflepuff</option>
+          <option class="filter" data-action="filter" data-filter="slytherin">Slytherin</option>
+          <option class="filter" data-action="filter" data-filter="ravenclaw">Ravenclaw</option>
       </select> 
 
-      <button data-action="filter" class= "filter" data-filter="expelled">View expelled students</button>
-    </section>
- 
-    <section id="rightsection">
-      <table>
-      <label for="sorting">Sort by:</label> 
-      <thead>  
-        
-      <tr name="sorting" id="sorting">
-        <th data-action="sort" data-sort-direction="asc" data-sort="firstname">First name</th>
-        <th data-action="sort" data-sort-direction="asc" data-sort="lastname">Last name</th>
-        <th data-action="sort" data-sort-direction="asc" data-sort="house">House</th>
-        <th data-action="sort" data-sort-direction="asc" data-sort="prefects">Prefects</th>
-      </tr>
-    </thead> 
-  </table>
-  <input type="text" id="searchbar" placeholder="Search for names..">
-  <button class="searchbutton">Search</button>
-      <main></main>
-      <template id="student">
-          
-        <article class="grid">
-          <div class="image">
-            <img data-field="photo" src=""/></img>
-          </div>
-          <div class="text">
-            <h3 data-field="firstname">NAME</td>
-            <h3 data-field="gender">GENDER</td>
-            <h3 data-field="house">HOUSE</td>
-            <h3 data-field="prefect" data-prefect="false">Prefect</h3>
-            <h4 data-field="blood">Blood status</h4>
-            <h4 data-field="inquisitorial">Inquisitorial squad</h4>
-            <button class="details">View details</button>
-          </div>
-        </article>
-      </template>
-      </section>
-    </section> 
-    
-    <div id="singleview" class="modal hide">
-      <div class="dialog">
-        <button class="closebutton">X</button>
-        <h1>Student details</h1>
-        <div class="detailswindow">
-          <img data-single="photo" src="" alt="">
-          <h4 data-single="firstname">First name</h4>
-          <h4 data-single="middlename">Middle name</h4>
-          <h4 data-single="lastname">Last name</h4>
-          <h4 data-single="nickname">Nick name</h4>
-          <h4 data-single="house">House</h4>
-          <h4 data-single="gender">Gender</h4>
-          <h4 data-single="expelled" style="color: red;"></h4>
-          <h4>Blood status</h4>
-          <button id="expell">Expell student<span data-field="prefecta">A</span></button>
-        </div>
-      </div>
-    </div>
-    <script src="index.js"></script>
-    
-    <div id="remove_aorb" class="modal hide">
-      <div class="dialog">
-        <button class="closebutton">X</button>
-        <h1>Warning</h1>
-        <p>There can only be two prefects of each house. Do you want to remove one of the existing?</p>
-        <button id="removea">Remove <span data-field="prefecta">A</span></button>
-        <button id="removeb">Remove <span data-field="prefectb">B</span></button>
-      </div>
-    </div>
+        <button data-action="filter" class= "filter" data-filter="prefects">View prefects</button>
+        <button data-action="filter" class= "filter" data-filter="inquisitorial">View Inquisitorial Squad</button>
+        <button data-action="filter" class= "filter" data-filter="expelled">View expelled students</button>
 
-    <div id="inquisitorial" class="modal hide">
-      <div class="dialog">
-        <button class="closebutton">X</button>
-        <h1>Warning</h1>
-        <p>The student is not elligible for the Inquisitorial Squad.</p>
-        <button class="okbutton">OK</button>
+      <div class="stats">
+        <p data-stats="studentsdisplayed">placeholder</p>
+        <p data-stats="studentstotal">placeholder</p>
+        <p data-stats="studentsexpelled">Expelled students: 0</p>
+        <p data-stats="studentsgryffindor">Students in Gryffindor:</p>
+        <p data-stats="studentshufflepuff">Students in Hufflepuff:</p>
+        <p data-stats="studentsslytherin">Students in Slytherin:</p>
+        <p data-stats="studentsravenclaw">Students in Ravenclaw:</p>
       </div>
-    </div>
+      
+    </section>
+  
+    <section id="rightsection">
+
+        <main></main>
+        <template id="student">
+                  
+          <article class="grid">
+            <div class="image">
+              <img data-field="photo" src=""/></img>
+            </div>
+            <div class="info">
+              <div class="name">
+                <h4 data-field="firstname">NAME</h4>
+              </div>
+              <div class="bloodstatus" title="Bloodstatus">
+                <img src="/blood.png" data-field="blood" data-blood="false"></img>
+              </div>
+              <div class="prefect" title="Prefect">
+                <img src="/prefect.png" data-field="prefect" data-prefect="false"></img>
+              </div>
+              <div class="inquisotorialsquad" title="Inquisitorial Squad">
+                <img src="/inqsq.png" data-field="inquisitorial" data-inquisitorial="false"></img>
+              </div>
+              <div class="viewdetails">
+                <button class="details">View details</button>
+              </div>
+            </div>
+          </article>
+        </template>
+    </section>
+  </section> 
     
-    <div id="cannotbeexpelled" class="modal hide">
-      <div class="dialog">
-        <button class="closebutton">X</button>
-        <h1>Warning</h1>
-        <p>The student cannot be expelled.</p>
-        <button class="okbutton">OK</button>
+  <div id="singleview" class="modal hide">
+    <div class="dialog">
+      <button class="closebutton">X</button>
+      <h1>Student details</h1>
+      <div class="detailswindow">
+        <div class="detailsphoto">
+          <img data-single="photo" src="" alt="">
+        </div>
+        <div class="detailsicons">
+          <div class="housecrest" title="House">
+          <img src="" data-field="housecrest"></img>
+        </div>
+          <div class="bloodstatus" title="Bloodstatus">
+            <img src="/blood.png" data-single="blood" data-blood="false"></img>
+          </div>
+          <div class="prefect" title="Prefect">
+            <img src="/prefect.png" data-single="prefect" data-prefect="false"></img>
+          </div>
+          <div class="inquisotorialsquad" title="Inquisitorial Squad">
+            <img src="/inqsq.png" data-single="inquisitorial" data-inquisitorial="false"></img>
+          </div>
+        </div>
+        <div class="detailstext">
+          <div class="detailsname">
+            <p data-single="firstname">First name</p>
+            <p data-single="middlename">Middle name</p>
+            <p data-single="lastname">Last name</p>
+            <p data-single="nickname">Nick name</p>
+          </div>
+          <div class="detailsinfo">
+            <p data-single="house">House</p>
+            <p data-single="gender">Gender</p>
+            <p data-single="bloodstatus">Bloodstatus</p>
+            <p data-single="expelled" style="color: red;"></p>
+          </div>
+        </div>
+        <button id="expell">Expell student</button>
       </div>
     </div>
+  </div>
+    
+    
+  <div id="remove_aorb" class="modal hide">
+    <div class="dialog">
+      <button class="closebutton">X</button>
+      <h1>Warning</h1>
+      <p>There can only be two prefects of each house. Do you want to remove one of the existing?</p>
+      <button id="removea">Remove <span data-field="prefecta">A</span></button>
+      <button id="removeb">Remove <span data-field="prefectb">B</span></button>
+    </div>
+  </div>
+
+  <div id="inquisitorial" class="modal hide">
+    <div class="dialog">
+      <button class="closebutton">X</button>
+      <h1>Warning</h1>
+      <p>The student is not elligible for the Inquisitorial Squad.</p>
+      <button class="okbutton">OK</button>
+    </div>
+  </div>
+    
+  <div id="cannotbeexpelled" class="modal hide">
+    <div class="dialog">
+      <button class="closebutton">X</button>
+      <h1>Warning</h1>
+      <p>The student cannot be expelled.</p>
+      <button class="okbutton">OK</button>
+    </div>
+  </div>
+
+  <script src="index.js"></script>
 </body>
 </html>
