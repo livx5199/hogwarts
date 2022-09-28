@@ -209,16 +209,16 @@ function prepareObjects(jsonData) {
         //Photo
         function preparePhoto() {
             if (lastName !== undefined && lastName.indexOf("-") !== -1) {
-                const photoData = "images/" + lastName.substring(lastName.indexOf("-") + 1) + "_" + firstName.substring(0, 1) + ".png";
+                const photoData = "./images/" + lastName.substring(lastName.indexOf("-") + 1) + "_" + firstName.substring(0, 1) + ".png";
                 return photoData;
             } else if (lastName === "Patil") {
-                const photoData = "images/" + lastName + "_" + firstName.substring(0) + ".png";
+                const photoData = "./images/" + lastName + "_" + firstName.substring(0) + ".png";
                 return photoData;
             } else if (lastName === "Leanne") {
-                const photoData = "/no photo.png";
+                const photoData = "./no photo.png";
                 return photoData;
             } else {
-                const photoData = "images/" + lastName + "_" + firstName.substring(0, 1) + ".png";
+                const photoData = "./images/" + lastName + "_" + firstName.substring(0, 1) + ".png";
                 return photoData;
             }        
         }
@@ -598,16 +598,16 @@ function displayStudentDetails(student) {
     
     if (student.house === "Hufflepuff") {
         document.querySelector(".dialog").style.background = "rgb(83, 78, 10)";
-        document.querySelector("[data-field=housecrest]").src = "/hufflepuff.png"
+        document.querySelector("[data-field=housecrest]").src = "./hufflepuff.png"
     } else if (student.house === "Slytherin") {
         document.querySelector(".dialog").style.background = "rgb(7, 43, 9)";
-        document.querySelector("[data-field=housecrest]").src = "/slytherin.png"
+        document.querySelector("[data-field=housecrest]").src = "./slytherin.png"
     } else if (student.house === "Gryffindor") {
         document.querySelector(".dialog").style.background = "rgb(74, 19, 21)";
-        document.querySelector("[data-field=housecrest]").src = "/gryffindor.png"
+        document.querySelector("[data-field=housecrest]").src = "./gryffindor.png"
     } else if (student.house === "Ravenclaw") {
         document.querySelector(".dialog").style.background = "rgb(17, 19, 68)";
-        document.querySelector("[data-field=housecrest]").src = "/ravenclaw.png"
+        document.querySelector("[data-field=housecrest]").src = "./ravenclaw.png"
     }
 
 }
